@@ -1,0 +1,25 @@
+{
+  "name": "cardano-cli-lib",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev2": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "export": "next build && next export"
+  },
+  "dependencies": {
+    "unique-filename": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "@types/react": "^17.0.34",
+    "@types/uuid": "^8.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "sass": "^1.43.4",
+    "tsutils": "^3.21.0",
+    "typescript": "^4.5.2"
+  }
+}
