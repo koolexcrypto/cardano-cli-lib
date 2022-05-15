@@ -8,7 +8,7 @@ const accountsDirName = 'cardano';
 export class CardanoJS {
   extractUtxoAmount(amountArr: string[]): any {
     const amount = {};
-    let txOutDatumHash;
+    // let txOutDatumHash;
     let i = 0;
     while (i < amountArr.length) {
       if (amountArr[i] === '+') {
@@ -20,7 +20,7 @@ export class CardanoJS {
           amount['txOutDatumHash'] = [amountArr?.[i + 1], amountArr?.[i + 2]];
           i += 3;
         } else {
-          const quantity = parseInt(amountArr[i]);
+          const quantity = parseInt(amountArr[i],10);
           const token = amountArr?.[i + 1];
           amount[token] = quantity;
           i += 2;
@@ -31,7 +31,7 @@ export class CardanoJS {
     return amount;
   }
 
-  queryUtxo(cardanoCliParam: ICardanoCli.CardanoCliParam, paymentAddress: string): ICardanoCli.queryUtxoRow[] {
+  queryUtxo(cardanoCliParam: ICardanoCli.CardanoCliParam, paymentAddress: string): ICardanoCli.QueryUtxoRow[] {
     if (!paymentAddress) {
       throw new Error(`Payment address is required`);
     }
@@ -49,7 +49,7 @@ export class CardanoJS {
     const result = utxosArr.map((line, index) => {
       const utxo = line.replace(/\s+/g, ' ').split(' ');
       const txHash = utxo[0];
-      const txId = parseInt(utxo[1]);
+      const txId = parseInt(utxo[1],10);
       const amount = this.extractUtxoAmount(utxo.slice(2, utxo.length));
       const res = { txHash, txId, amount, raw: line };
       return res;
@@ -67,7 +67,7 @@ export class CardanoJS {
 
   tokenBalance(cardanoCliParam: ICardanoCli.CardanoCliParam, paymentAddress: string, token: string): number {
     let amount: number = 0;
-    let utxo = this.queryUtxo(cardanoCliParam, paymentAddress);
+    const utxo = this.queryUtxo(cardanoCliParam, paymentAddress);
     for (let i = 0; i < utxo.length; i++) {
       amount += utxo[i]?.amount?.[token];
     }
@@ -97,8 +97,8 @@ export class CardanoJS {
             `);
 
     return {
-      paymentVKeyPath: paymentVKeyPath,
-      paymentSKeyPath: paymentSKeyPath,
+      paymentVKeyPath,
+      paymentSKeyPath,
     };
   }
 
@@ -111,8 +111,8 @@ export class CardanoJS {
     const paymentSKeyPath = `${accountDirPath}/${addressKeyGenParam.name}-pay.skey`;
 
     return {
-      paymentVKeyPath: paymentVKeyPath,
-      paymentSKeyPath: paymentSKeyPath,
+      paymentVKeyPath,
+      paymentSKeyPath,
     };
   }
 
@@ -168,7 +168,7 @@ export class CardanoJS {
       .map((txOut, index) => {
         let t = ` --tx-out ${txOut.paymentAddreess}+${txOut.amount.lovelace}`;
         let nativeTokenAmounts = '';
-        for (var token of Object.keys(txOut.amount)) {
+        for (const token of Object.keys(txOut.amount)) {
           if (token !== 'lovelace') {
             nativeTokenAmounts += `${txOut.amount[token]} ${token} + `;
           }
@@ -195,7 +195,6 @@ export class CardanoJS {
   --fee ${transaction.fee} \
   ${mintOptionsCMD} \
   --out-file ${transaction.outFile}`;
-    console.log(cmd);
     const transactionBuildRaw = execSync(`${cmd}`);
   }
 
@@ -212,9 +211,8 @@ export class CardanoJS {
   --mainnet \
   --protocol-params-file ${feeCalculationParams.protocolParamsFile}
   `;
-    console.log(cmd);
     const calcFee = execSync(`${cmd}`).toString();
-    return parseInt(calcFee.split(' ')[0]);
+    return parseInt(calcFee.split(' ')[0],10);
   }
 
   protocolParameters(cardanoCliParam: ICardanoCli.CardanoCliParam, filePath: string): void {
@@ -222,7 +220,6 @@ export class CardanoJS {
   --${cardanoCliParam.network} \
   --out-file ${filePath}
   `;
-    console.log(cmd);
     const protocolParameters = execSync(`${cmd}`);
   }
 
@@ -230,7 +227,6 @@ export class CardanoJS {
     const cmd = `${cardanoCliParam.cardanoCliCmd} query tip \
   --${cardanoCliParam.network} \
   `;
-    console.log(cmd);
     const tip = execSync(`${cmd}`).toString();
     return tip;
   }
@@ -245,7 +241,6 @@ export class CardanoJS {
   --${cardanoCliParam.network} \
   --out-file ${transactionSignParams.outFile}
   `;
-    console.log(cmd);
     const signT = execSync(`${cmd}`);
   }
 
@@ -254,7 +249,6 @@ export class CardanoJS {
   --tx-file ${filePath} \
   --${cardanoCliParam.network}
   `;
-    console.log(cmd);
     execSync(`${cmd}`);
   }
 
@@ -262,15 +256,14 @@ export class CardanoJS {
     const cmd = `${cardanoCliParam.cardanoCliCmd} transaction view \
   --tx-file ${txFilePath} 
   `;
-    console.log(cmd);
     return execSync(`${cmd}`).toString();
   }
 
-  extractAllTokensBalances(utxosParam: ICardanoCli.queryUtxoRow[]) {
+  extractAllTokensBalances(utxosParam: ICardanoCli.QueryUtxoRow[]) {
     const tokens = [];
     for (let i = 0; i < utxosParam.length; i++) {
       const utxoAmount = utxosParam[i].amount;
-      for (var token in utxoAmount) {
+      for (const token in utxoAmount) {
         if (utxoAmount.hasOwnProperty(token)) {
           if (!tokens[token]) {
             tokens[token] = 0;
@@ -286,7 +279,6 @@ export class CardanoJS {
     const cmd = `${cardanoCliParam.cardanoCliCmd} address key-hash \
   --payment-verification-key-file ${paymentVKeyPath} \
   `;
-    console.log(cmd);
     return execSync(`${cmd}`).toString().trim();
   }
 
@@ -294,9 +286,7 @@ export class CardanoJS {
     const cmd = `${cardanoCliParam.cardanoCliCmd} transaction policyid \
   --script-file ${scriptFilePath} \
   `;
-    console.log(cmd);
     return execSync(`${cmd}`).toString().trim();
   }
 
-  mint(): void {}
 }

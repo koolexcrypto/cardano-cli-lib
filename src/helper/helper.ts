@@ -46,7 +46,7 @@ export class CardanoHelper {
     const cardano = new CardanoJS();
     const keyHash = cardano.addressKeyHash(cardanoCliParam, verifyKeyFile);
     const policyScript = {
-      keyHash: keyHash,
+      keyHash,
       type: 'sig',
     };
     const unqiuetFileName = uniqueFilename(os.tmpdir());
@@ -64,7 +64,7 @@ export class CardanoHelper {
     const keyHash = cardano.addressKeyHash(cardanoCliParam, mintTokenParams.verifyKeyFile);
 
     const policyScript = {
-      keyHash: keyHash,
+      keyHash,
       type: 'sig',
     };
     const unqiuetFileName = uniqueFilename(os.tmpdir());
@@ -116,8 +116,8 @@ export class CardanoHelper {
       invalidHereafter: 0,
       outFile: `${txOutFile}.mint.draft.tx`,
       mintOptions: {
-        token: token,
-        amount: amount,
+        token,
+        amount,
         metaDataJsonFile: metaDatatFilePath,
         mintScriptFile: policyScriptFile,
       },
@@ -155,8 +155,8 @@ export class CardanoHelper {
       invalidHereafter: timeToLive,
       outFile: `${txOutFile}.mint.raw.tx`,
       mintOptions: {
-        token: token,
-        amount: amount,
+        token,
+        amount,
         metaDataJsonFile: metaDatatFilePath,
         mintScriptFile: policyScriptFile,
       },
@@ -184,7 +184,7 @@ export class CardanoHelper {
     const keyHash = cardano.addressKeyHash(cardanoCliParam, mintTokenParams.verifyKeyFile);
 
     const policyScript = {
-      keyHash: keyHash,
+      keyHash,
       type: 'sig',
     };
     const unqiuetFileName = uniqueFilename(os.tmpdir());
@@ -198,9 +198,7 @@ export class CardanoHelper {
     const metaDatatFilePath = `${unqiuetFileName}.metadata.json`;
     fs.writeFileSync(metaDatatFilePath, JSON.stringify(metadata));
     const senderMintTokensAmounts = cardano.extractAllTokensBalances(utxos);
-    console.log('senderMintTokensAmounts');
 
-    console.log(senderMintTokensAmounts);
     if (!senderMintTokensAmounts['lovelace']) {
       senderMintTokensAmounts['lovelace'] = 0;
     }
@@ -226,8 +224,8 @@ export class CardanoHelper {
       invalidHereafter: 0,
       outFile: `${txOutFile}.mint.draft.tx`,
       mintOptions: {
-        token: token,
-        amount: amount,
+        token,
+        amount,
         metaDataJsonFile: metaDatatFilePath,
         mintScriptFile: policyScriptFile,
       },
@@ -294,7 +292,7 @@ export class CardanoHelper {
           txIx: txIn.txId,
         };
       }),
-      txOuts: txOuts,
+      txOuts,
       fee: 0,
       invalidHereafter: 0,
       outFile: `${txOutFile}.draft.tx`,
@@ -327,8 +325,8 @@ export class CardanoHelper {
           txIx: txIn.txId,
         };
       }),
-      txOuts: txOuts,
-      fee: fee,
+      txOuts,
+      fee,
       invalidHereafter: timeToLive,
       outFile: `${txOutFile}.raw.tx`,
       mintOptions: null,

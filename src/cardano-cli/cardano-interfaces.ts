@@ -8,7 +8,7 @@ export interface AddressKeyGenParam {
   dirPath: string;
 }
 
-export interface queryUtxoRow {
+export interface QueryUtxoRow {
   txHash: string;
   txId: number;
   amount: any;
