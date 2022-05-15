@@ -2,30 +2,37 @@
   "name": "cardano-cli-lib",
   "version": "1.0.0",
   "private": false,
-  "main":"index.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "author": "KardanoClub: KoolexCrypto & Maho",
   "license": "ISC",
   "scripts": {
-    "test":"echo \"Error: no test specified\" && exit 1",
-    "build":"npx tsc"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json"
   },
+  "files": [
+    "lib/**/*"
+  ],
   "repository": {
     "type": "git",
-    "url":"git+https://github.com/koolexcrypto/cardano-cli-lib.git"
+    "url": "git+https://github.com/koolexcrypto/cardano-cli-lib.git"
   },
   "bugs": {
-    "url":"https://github.com/koolexcrypto/cardano-cli-lib/issues"
+    "url": "https://github.com/koolexcrypto/cardano-cli-lib/issues"
   },
   "dependencies": {
     "unique-filename": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",
-    "@types/react": "^17.0.34",
-    "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "sass": "^1.43.4",
+    "prettier": "^2.6.2",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
     "tsutils": "^3.21.0",
     "typescript": "^4.5.2"
   }
