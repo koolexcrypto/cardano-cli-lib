@@ -5,13 +5,18 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "author": "KardanoClub: KoolexCrypto & Maho",
+  "description": "JS interface for Cardano-CLI",
   "license": "ISC",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "npm run build",
+    "prepublishOnly" : "npm run lint",
+    "preversion" : "npm run lint",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "version" : "npm run format && git add -A src",
+    "postversion" : "git push && git push --tags"
   },
   "files": [
     "lib/**/*"
