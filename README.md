@@ -1,6 +1,9 @@
 # cardano-cli-lib
 # NOT UPDATED YET
 
+# JOIN THE COMMUNITY ON DISCORD
+https://discord.gg/JgQ7aR8nuS
+
 ## Build and run for dev 
 
 First, make sure Cardano-Node is running and cardano-cli is accessible
